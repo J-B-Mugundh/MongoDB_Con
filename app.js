@@ -23,9 +23,14 @@ connectToDb((err) => {
 app.get('/books', (req, res) => {
     let books = [];
 
+    const page = req.query.p || 0
+    const booksPerPage = 2
+
     db.collection('books')
         .find() // returns a cursor pointing to all the documents
         .sort({ author: 1 })
+        .skip(page * booksPerPage)
+        .limit(booksPerPage)
         .forEach(book => books.push(book))
         .then(() => {
             res.status(200).json(books);
@@ -36,6 +41,8 @@ app.get('/books', (req, res) => {
 });
 
 app.get('/books/:id', (req, res) => {
+    // current page
+
     if(ObjectId.isValid(req.params.id)){
         db.collection('books')
         .findOne({_id : new ObjectId(req.params.id)}) // returns a cursor pointing to all the documents
