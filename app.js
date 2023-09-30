@@ -18,6 +18,16 @@ connectToDb((err) => {
 
 // routes
 app.get('/books', (req, res) => {
+    let books = [];
 
-    res.json({msg: "Welcome to api"})
-})
+    db.collection('books')
+        .find() // returns a cursor pointing to all the documents
+        .sort({ author: 1 })
+        .forEach(book => books.push(book))
+        .then(() => {
+            res.status(200).json(books);
+        })
+        .catch(() => {
+            res.status(500).json({ error: 'Could not fetch the data' });
+        });
+});

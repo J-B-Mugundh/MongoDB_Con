@@ -1,10 +1,10 @@
-const {MongoClient} = require('mongodb')
+const { MongoClient } = require('mongodb')
 
 let dbConnection
 
 module.exports = {
     connectToDb : (cb) => { // cb => callback function that runs after the connection is established
-        MongoClient.connect('mongpdb://localhost:27017/bookstore')
+        MongoClient.connect('mongodb://127.0.0.1:27017/bookstore')
         .then((client) => {
             dbConnection = client.db()
             return cb()
